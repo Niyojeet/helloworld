@@ -1,0 +1,6 @@
+Python (≥3.7) Already on most systems
+AWS CLI 
+Git (sudo apt install git or brew install git)
+AWS credentials configured (aws configure)
+Pulumi installed (npm install -g pulumi)
+A Pulumi Python project (pulumi new aws-python)
