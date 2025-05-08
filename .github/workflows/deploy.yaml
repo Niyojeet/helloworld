@@ -1,0 +1,35 @@
+name: Deploy to k3s on EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to k3s via SSH
+      run: |
+        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd ~/helloworld || mkdir ~/helloworld && cd ~/helloworld
+          rm -rf *  # Clean old files
+        EOF
+
+        scp -r * ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/helloworld
+
+        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          cd ~/helloworld
+          kubectl apply -f k8s/
+        EOF
