@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE: your-dockerhub-username/helloworld:latest
+      DOCKER_IMAGE: niyojeet/helloworld:latest
 
     steps:
       - name: Checkout code
