@@ -9,27 +9,32 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      DOCKER_IMAGE: your-dockerhub-username/helloworld:latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Deploy to k3s via SSH
-      run: |
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd ~/helloworld || mkdir ~/helloworld && cd ~/helloworld
-          rm -rf *  # Clean old files
-        EOF
+      - name: Build Docker image
+        run: docker build -t $DOCKER_IMAGE .
 
-        scp -r * ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/helloworld
+      - name: Push Docker image
+        run: docker push $DOCKER_IMAGE
 
-        ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd ~/helloworld
-          kubectl apply -f k8s/
-        EOF
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to k3s cluster
+        run: |
+          scp k8s/deployment.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/deployment.yaml
+          ssh ubuntu@${{ secrets.EC2_HOST }} "
+            kubectl apply -f /home/ubuntu/deployment.yaml
+          "
