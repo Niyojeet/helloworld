@@ -37,4 +37,5 @@ jobs:
           scp k8s/deployment.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/deployment.yaml
           ssh ubuntu@${{ secrets.EC2_HOST }} "
             kubectl apply -f /home/ubuntu/deployment.yaml
+            kubectl apply -f /home/ubuntu/service.yaml
           "
