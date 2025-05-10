@@ -47,8 +47,8 @@ jobs:
   
       uses: appleboy/ssh-action@v1.0.0
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           export IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/helloworld:${{ github.sha }}
