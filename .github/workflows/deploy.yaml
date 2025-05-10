@@ -35,6 +35,7 @@ jobs:
       - name: Deploy to k3s cluster
         run: |
           scp k8s/deployment.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/deployment.yaml
+          scp ./k8s/service.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/service.yaml
           ssh ubuntu@${{ secrets.EC2_HOST }} "
             kubectl apply -f /home/ubuntu/deployment.yaml
             kubectl apply -f /home/ubuntu/service.yaml
