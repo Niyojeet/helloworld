@@ -44,5 +44,13 @@ jobs:
         EOF
 
     - name: Update Deployment Image
-      run: |
-        kubectl set image deployment/helloworld helloworld=$IMAGE_NAME:${{ github.sha }}
+  
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          export IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/helloworld:${{ github.sha }}
+          kubectl set image deployment/helloworld helloworld=$IMAGE_NAME
+
