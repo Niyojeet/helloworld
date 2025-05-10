@@ -2,6 +2,7 @@ import pulumi
 import pulumi_aws as aws
 
 # ---------- CONFIG ----------
+# choosing the region with lowest latency 
 aws.config.region = "ap-south-1"
 
 # ---------- SSH Key ----------
