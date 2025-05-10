@@ -34,12 +34,6 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    - name: Set up Kubeconfig
-      run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-        chmod 600 ~/.kube/config
-
     - name: Deploy to k3s cluster
       run: |
         scp k8s/*.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
