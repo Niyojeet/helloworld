@@ -52,5 +52,5 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           export IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/helloworld:${{ github.sha }}
-          kubectl set image deployment/helloworld helloworld=$IMAGE_NAME
+            kubectl set image deployment/helloworld helloworld=$IMAGE_NAME
 
