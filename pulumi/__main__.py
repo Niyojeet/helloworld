@@ -43,6 +43,8 @@ sleep 15
 apt-get update -y
 apt-get install -y curl
 
+sleep 10
+
 # Install k3s
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode 644" sh -
 
