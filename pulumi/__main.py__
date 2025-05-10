@@ -46,12 +46,17 @@ chown -R ubuntu:ubuntu /home/ubuntu/.kube
 
 # 4. Create EC2 instance
 ec2 = aws.ec2.Instance("k3s-node",
-  instance_type="t2.micro",
-  vpc_security_group_ids=[sec_group.id],
-  ami=ami.id,
-  user_data=user_data,
-  key_name=key_pair.key_name,  # ← Add this line
-  tags={"Name": "Pulumi-K3s"}
+    instance_type="t3a.small", 
+    vpc_security_group_ids=[sec_group.id],
+    ami=ami.id,
+    user_data=user_data,
+    key_name=key_pair.key_name,  
+    tags={"Name": "Pulumi-K3s"},
+    root_block_device=aws.ec2.InstanceRootBlockDeviceArgs(
+        volume_size=20,              
+        volume_type="gp3",            
+        delete_on_termination=True
+    )
 )
 
 # 5. Export the public IP
