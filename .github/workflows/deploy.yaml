@@ -36,12 +36,6 @@ jobs:
         run: |
           scp k8s/*.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
           ssh ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-           # Install NGINX Ingress Controller for K3s
-            kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/baremetal/deploy.yaml
-
-           # Wait for controller to become ready (optional but recommended)
-            kubectl rollout status deployment ingress-nginx-controller -n ingress-nginx --timeout=120s
-          
            # Apply your app resources
             kubectl apply -f /home/ubuntu/deployment.yaml
             kubectl apply -f /home/ubuntu/service.yaml
