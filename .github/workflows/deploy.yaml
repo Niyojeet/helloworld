@@ -27,17 +27,27 @@ jobs:
         docker build -t $IMAGE_NAME:${{ github.sha }} .
         docker push $IMAGE_NAME:${{ github.sha }}
 
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
     - name: Set up Kubeconfig
       run: |
         mkdir -p ~/.kube
         echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
         chmod 600 ~/.kube/config
 
-    - name: Apply Kubernetes Manifests
+    - name: Deploy to k3s cluster
       run: |
-        kubectl apply -f service.yaml
-        kubectl apply -f ingress.yaml
-        kubectl apply -f deployment.yaml
+        scp k8s/*.yaml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+        ssh ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          kubectl apply -f /home/ubuntu/deployment.yaml
+          kubectl apply -f /home/ubuntu/service.yaml
+          kubectl apply -f /home/ubuntu/ingress.yaml
+        EOF
 
     - name: Update Deployment Image
       run: |
