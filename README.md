@@ -21,11 +21,12 @@ A flask based python webapp
   - provide the necessary details as asked by pulumi and you will able to see the details of the infrastructure to be provisioned
   - The listed infrastructure as per your __main__.py will be created
 
-## Setting Github Actions workflow
+## Setting up Github Actions workflow
 - Configurre Secrets
   -  DOCKER_USERNAME: Your Docker Hub username.
   -  DOCKER_PASSWORD: Your Docker Hub password or a personal access token.
-  -  KUBECONFIG: Your Kubernetes configuration file, which contains the credentials and details for connecting to your Kubernetes cluster.
   -  EC2_HOST: Your EC2 instance public IP
   -  EC2_USER: Your EC2 instance username
   -  SSH_PRIVATE_KEY: Your SSH private key 
+
+A new commit when merged with the main branch will trigger the Github actions workflow.
