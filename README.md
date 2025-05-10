@@ -19,6 +19,7 @@ A flask based python webapp
 - Generate a token and copy it as it will be needed for setting up Pulumi project
 - pulumi up
   - provide the necessary details as asked by pulumi and you will able to see the details of the infrastructure to be provisioned
+  - The listed infrastructure as per your __main__.py will be created
 
 ## Setting Github Actions workflow
 - Configurre Secrets
