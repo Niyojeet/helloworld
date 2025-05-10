@@ -6,7 +6,8 @@ import pulumi_aws as aws
 key_pair = aws.ec2.KeyPair("k3s-key",
   public_key=open("/root/.ssh/devops-key.pub").read()
 )
-
+#hard coding aws-region, can be commented out to use the default region as per client machine
+aws.config.region = "ap-south-1"
 # 1. Use Ubuntu 22.04 AMI
 ami = aws.ec2.get_ami(
     most_recent=True,
