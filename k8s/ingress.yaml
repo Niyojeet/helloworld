@@ -6,7 +6,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
-  ingressClassName: traefik
   rules:
   - host: 13.127.76.167.nip.io
     http:
