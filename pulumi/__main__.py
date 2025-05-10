@@ -33,17 +33,28 @@ sec_group = aws.ec2.SecurityGroup("k3s-sec-group",
 
 #installing k3s in ec2 instancce
 user_data = """#!/bin/bash
-# Log user data script output
 exec > /var/log/user-data.log 2>&1
+set -xe
+
+# Wait for network to be ready
+sleep 15
+
+# Update and install dependencies
+apt-get update -y
+apt-get install -y curl
 
 # Install k3s
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode 644" sh -
+
+# Wait for kubeconfig to be generated
+sleep 10
 
 # Setup kubeconfig for ubuntu user
 mkdir -p /home/ubuntu/.kube
 cp /etc/rancher/k3s/k3s.yaml /home/ubuntu/.kube/config
 chown -R ubuntu:ubuntu /home/ubuntu/.kube
 """
+
 
 # 4. Create EC2 instance
 ec2 = aws.ec2.Instance("k3s-node",
