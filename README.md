@@ -23,9 +23,9 @@ A flask based python webapp
 ## Setting Github Actions workflow
 - Configurre Secrets
   - Ensure that the following secrets are configured in your GitHub repository:
-    DOCKER_USERNAME: Your Docker Hub username.
-    DOCKER_PASSWORD: Your Docker Hub password or a personal access token.
-    KUBECONFIG: Your Kubernetes configuration file, which contains the credentials and details for connecting to your Kubernetes cluster.
-    EC2_HOST: Your EC2 instance public IP
-    EC2_USER: Your EC2 instance username
-    SSH_PRIVATE_KEY: Your SSH private key 
+  -  DOCKER_USERNAME: Your Docker Hub username.
+  -  DOCKER_PASSWORD: Your Docker Hub password or a personal access token.
+  -  KUBECONFIG: Your Kubernetes configuration file, which contains the credentials and details for connecting to your Kubernetes cluster.
+  -  EC2_HOST: Your EC2 instance public IP
+  -  EC2_USER: Your EC2 instance username
+  -  SSH_PRIVATE_KEY: Your SSH private key 
